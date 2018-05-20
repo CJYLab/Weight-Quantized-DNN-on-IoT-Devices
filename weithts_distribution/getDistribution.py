@@ -3,6 +3,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import math
 from collections import Counter
+import seaborn as sns 
+
 
 repFile=open("cjyreplaced","r")
 
@@ -112,9 +114,21 @@ wKeys=outCount.keys()
 
 wValues=outCount.values()
 
+#print(QuanWeights)
+
+
+#sns.distplot(QuanWeights, rug=True)
+
+
+#plt.hist(QuanWeights, bins=50, color='steelblue', normed=True)
+
+
 plt.bar(wKeys,wValues,width=0.001)
+#print(type(wKeys))
+#print(len(QuanWeights))
 
 plt.show()
+#plt.savefig('sns')
 #print(Clip(1))
 #print(Round(1.415))
 
