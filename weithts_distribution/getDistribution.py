@@ -24,15 +24,15 @@ parameters:
 
 
 LogQuant(x,bitwidth,FSR)= 0         x=0,	
-			  			  2^x'      otherwise.
+			  2^x'      otherwise.
 
 where
 
 x'=Clip(Round(log2|x|),FSR-2^bitwidth,FSR),
 
 		Clip(x,min,max)= 0        x<=min,
-				         max-1    x>=max,
-				         x	  otherwise.
+				 max-1    x>=max,
+				 x	  otherwise.
 Round(x)
 
 	for Round() function, the direction of round is decided by the fractional part of the parameter.
