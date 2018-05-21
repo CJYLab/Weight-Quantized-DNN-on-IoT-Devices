@@ -2,12 +2,9 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import math
+import collections
 from collections import Counter
 import seaborn as sns 
-
-
-repFile=open("cjyreplaced","r")
-
 
 
 """
@@ -46,12 +43,13 @@ Round(x)
 """
 
 #oneDemArray=np.array([])
+repFile=open("cjyreplaced","r")
 
 Maxima=0
 Minima=0
 
 
-print(repFile.tell())
+#print(repFile.tell())
 for line in repFile:
 	content=line.split()
 	#print(content)
@@ -64,14 +62,14 @@ for line in repFile:
 		else:
 			doNothing=0
 
-print(repFile.tell())
+#print(repFile.tell())
+
 FSR=Maxima-Minima
-print(2**(FSR-1))
+
+
+#print(2**(FSR-1))
 MIN=FSR-(2**4)
 
-	#print(impArr.shape)
-	#plt.figure('scattered sampling')
-	#plt.scatter()
 
 
 def Clip(x):
@@ -95,7 +93,10 @@ def Round(num):
 QuanWeights = []
 
 repFile1=open("cjyreplaced_dom","r")
-print(repFile1.tell())
+
+repFile2=open("quantified_data","w+")
+
+#print(repFile1.tell())
 for line2 in repFile1:
 	content2=line2.split()
 	for numbers2 in content2:
@@ -105,25 +106,37 @@ for line2 in repFile1:
 			QuanWeights.append(float(0))
 		else:
 			QuanWeights.append(2**Quantee)
-			
+			repFile2.write(str(2**Quantee))
 #a counter is a dict subclass for counting hashable objects.
 
 outCount=Counter(QuanWeights)
 
-wKeys=outCount.keys()
 
-wValues=outCount.values()
+
+sortedOutCount = collections.OrderedDict(sorted(outCount.items()))
+
+
+
+
+wKeys=np.array(sortedOutCount.keys())
+wValues=np.array(sortedOutCount.values())
+
+
 
 #print(QuanWeights)
+#print(outCount)
+
+#sns.factorplot(outCount, rug=True)
+plt.plot(wKeys,wValues,label='Frist line',color='r') 
+
+#plt.hist(od, bins=50, color='steelblue', normed=True)
 
 
-#sns.distplot(QuanWeights, rug=True)
+plt.bar(wKeys,wValues,width=0.001,align='edge')
+plt.xlabel('Log Quantified data')    
+plt.ylabel('Count')
 
-
-#plt.hist(QuanWeights, bins=50, color='steelblue', normed=True)
-
-
-plt.bar(wKeys,wValues,width=0.001)
+#plt.yticks(wValues)
 #print(type(wKeys))
 #print(len(QuanWeights))
 
