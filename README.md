@@ -1,1 +1,1 @@
-# weight quantitized DNN on embedded system
+# weight quantized DNN on embedded system
