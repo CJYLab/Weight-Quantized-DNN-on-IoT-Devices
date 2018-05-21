@@ -1,11 +1,11 @@
 # Chainer Learning Notes
 
 
-we will go through an official example to dive into Chainer source code.
+We will go through an official example to dive into Chainer source code.
 
 The example we used here is the MNIST : https://github.com/chainer/chainer/tree/master/examples/mnist
 
-Note when we search items from official documents, there are links which point to source code on github.
+Note when we search items from official documents, there are links which point to source code on Ghdtyithub.
 
 ![source code pointer](images/source_link.png)
 
@@ -26,3 +26,14 @@ class MLP(chainer.Chain):
         return self.l3(h2)
 ```
 
+<u>MLP</u> in train_minist.py first take parameters from command line when you run the train_mnist program and then form the specific training neural network.
+
+### How to initialize a NN? 
+
+A **Linear** link represents a mathematical function:
+
+f(x)=Wx+b  
+
+where W: weights
+
+​	     b: bias
