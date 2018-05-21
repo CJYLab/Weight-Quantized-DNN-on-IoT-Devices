@@ -12,7 +12,7 @@ Author: CAI JINGYONG @ BeatCraft, Inc & Tokyo University of Agriculture and Tech
 
 This scripts is not yet generalized.
 
-Here we give general algorithm of log quantizaiotn, for details please refer to paper:
+Here we give general algorithm of log quantization, for details please refer to paper:
 Convolutional Neural Networks using Logarithmic Data Representation
 url:https://arxiv.org/pdf/1603.01025.pdf
 
