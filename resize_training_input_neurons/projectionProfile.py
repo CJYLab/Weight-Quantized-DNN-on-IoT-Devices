@@ -25,6 +25,7 @@ def reconstruct(Chainer_trainset):
 
 
 reshapedMNISTdataset = reconstruct(train)
+reshapedMNISTdataset_t = reconstruct(test)
 
 # Next we need to resize the (28,28) array to 49 number of (7,7) small array
 # numpy offers methods to fetch rows and columns with ease
@@ -58,8 +59,8 @@ def reshapedMN_to_zones(reshapedMNISTdataset):
 
 
 zones, labels = reshapedMN_to_zones(reshapedMNISTdataset)
-
-print(len(zones))
+zones_t, labels_t = reshapedMN_to_zones(reshapedMNISTdataset_t)
+#print(len(zones))
 
 
 
@@ -70,42 +71,54 @@ we will compute 4 projection profiles (horizontally, vertically, left diagnosly 
 For each array, we get 4 projection profiles, then we store peak values for each projection profile
 """	
 
-
+f = open("resizedInputs_t","w+")
 #zones have 60000 items
-#for each item,  
+#each item has 16 groups(array)
 def computeProjectionProfile(zones):
+	resizedInputs = []
 	for items in zones:
-		#print(len(items))
-		
+		fourProjectionProfile = []
 		for subitem in items:
 
 			horizon = []
 			for i in range(7):
-				#print(subitem[i])
-				#break
 				horizon.append(np.sum(subitem[i]))
 			hori_max = max(horizon)
+			fourProjectionProfile.append(hori_max)
 
 
 			vertical = []
 			for j in range(7):
 				vertical = subitem.sum(axis=0)
 			vert_max = max(vertical)
-			
+			fourProjectionProfile.append(vert_max)
+
+
 			leftdiag = []
 			for k in range(-6,7):
 				leftdiag.append(subitem.diagonal(k).sum())
 			left_dia_max = max(leftdiag)
-			
+			fourProjectionProfile.append(left_dia_max)			
+
+
 			rightdiag=[]
 			for l in range(-6,7):
 				rightdiag.append(np.fliplr(subitem).diagonal(l).sum())
 			right_dia_max = max(rightdiag)
+			fourProjectionProfile.append(right_dia_max)
+		#print(type(fourProjectionProfile))
+		f.write(str(fourProjectionProfile))
+		resizedInputs.append(fourProjectionProfile)
 	
+	return resizedInputs
 
 
-		
-computeProjectionProfile(zones)
+
+
+
+#resizedInputs = computeProjectionProfile(zones)
+resizedInputs_t = computeProjectionProfile(zones_t)
+
 
 
 
