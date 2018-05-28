@@ -91,9 +91,20 @@ def computeProjectionProfile(zones):
 			for j in range(7):
 				vertical = subitem.sum(axis=0)
 			vert_max = max(vertical)
+			
+			leftdiag = []
+			for k in range(-6,7):
+				leftdiag.append(subitem.diagonal(k).sum())
+			left_dia_max = max(leftdiag)
+			
+			rightdiag=[]
+			for l in range(-6,7):
+				rightdiag.append(np.fliplr(subitem).diagonal(l).sum())
+			right_dia_max = max(rightdiag)
+	
 
 
-
+		
 computeProjectionProfile(zones)
 
 
