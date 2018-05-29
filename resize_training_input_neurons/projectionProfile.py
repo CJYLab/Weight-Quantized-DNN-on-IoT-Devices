@@ -125,7 +125,6 @@ def computeProjectionProfile(zones):
 
 resizedInputs = computeProjectionProfile(zones)
 resizedInputs_t = computeProjectionProfile(zones_t)
-<<<<<<< HEAD
 
 #print(len(resizedInputs))
 
@@ -136,12 +135,12 @@ class MLP(chainer.Chain):
         super(MLP, self).__init__()
         with self.init_scope():
             self.l1 = L.Linear(None, n_units)  
-            self.l2 = L.Linear(None, n_units)  
-	    self.l3 = L.Linear(None, n_out)  # n_units -> n_out
+            self.l2 = L.Linear(None, n_out)  
+	    #self.l3 = L.Linear(None, n_out)  # n_units -> n_out
     def __call__(self, x):
         h1 = F.relu(self.l1(x))
-	h2 = F.relu(self.l2(h1))
-        return self.l3(h2)
+	#h2 = F.relu(self.l2(h1))
+        return self.l2(h1)
 
 
 
@@ -157,7 +156,7 @@ test_t = tuple_dataset.TupleDataset(np.array(resizedInputs_t, dtype = np.float32
 print(train_.__getitem__(0))
 
 
-model = L.Classifier(MLP(16, 10))
+model = L.Classifier(MLP(10, 10))
 
 
 optimizer = chainer.optimizers.Adam()
@@ -188,5 +187,3 @@ trainer.run()
 
 
 
-=======
->>>>>>> 59fc22c3decba93a98438b955f60cf78c2953663
