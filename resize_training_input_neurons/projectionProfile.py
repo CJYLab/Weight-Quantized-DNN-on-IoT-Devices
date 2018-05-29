@@ -3,12 +3,13 @@ import chainer.functions as F
 import chainer.links as L
 from chainer import training
 from chainer.training import extensions
+from chainer.datasets import tuple_dataset
 import numpy as np
 
 train, test = chainer.datasets.get_mnist()
 
-
-
+#train = train[0:1000]
+#test = test[0:1000]
 #reconstruct the (784,) array to shape of (28,28)
 def reconstruct(Chainer_trainset):
 
@@ -60,6 +61,10 @@ def reshapedMN_to_zones(reshapedMNISTdataset):
 
 zones, labels = reshapedMN_to_zones(reshapedMNISTdataset)
 zones_t, labels_t = reshapedMN_to_zones(reshapedMNISTdataset_t)
+
+
+#zones = zones[0:3000]
+#print(len(zones))
 #print(len(zones))
 
 
@@ -71,7 +76,9 @@ we will compute 4 projection profiles (horizontally, vertically, left diagnosly 
 For each array, we get 4 projection profiles, then we store peak values for each projection profile
 """	
 
-f = open("resizedInputs_t","w+")
+#f = open("resizedInputs_t","w+")
+
+
 #zones have 60000 items
 #each item has 16 groups(array)
 def computeProjectionProfile(zones):
@@ -107,54 +114,75 @@ def computeProjectionProfile(zones):
 			right_dia_max = max(rightdiag)
 			fourProjectionProfile.append(right_dia_max)
 		#print(type(fourProjectionProfile))
-		f.write(str(fourProjectionProfile))
+		#f.write(str(fourProjectionProfile))
 		resizedInputs.append(fourProjectionProfile)
-	
+		
 	return resizedInputs
 
 
 
 
 
-#resizedInputs = computeProjectionProfile(zones)
+resizedInputs = computeProjectionProfile(zones)
 resizedInputs_t = computeProjectionProfile(zones_t)
 
+#print(len(resizedInputs))
+
+
+class MLP(chainer.Chain):
+
+    def __init__(self, n_units, n_out):
+        super(MLP, self).__init__()
+        with self.init_scope():
+            self.l1 = L.Linear(None, n_units)  
+            self.l2 = L.Linear(None, n_units)  
+	    self.l3 = L.Linear(None, n_out)  # n_units -> n_out
+    def __call__(self, x):
+        h1 = F.relu(self.l1(x))
+	h2 = F.relu(self.l2(h1))
+        return self.l3(h2)
 
 
 
 
+train_ = tuple_dataset.TupleDataset(np.array(resizedInputs, dtype = np.float32), np.array(labels, dtype = np.int32))
+test_t = tuple_dataset.TupleDataset(np.array(resizedInputs_t, dtype = np.float32), np.array(labels_t, dtype = np.int32))
 
 
 
 
+#print(train_[0])
+
+print(train_.__getitem__(0))
 
 
+model = L.Classifier(MLP(16, 10))
 
 
+optimizer = chainer.optimizers.Adam()
+    
+optimizer.setup(model)
 
 
+train_iter = chainer.iterators.SerialIterator(train_, 100)
+    
+test_iter = chainer.iterators.SerialIterator(test_t, 100, repeat=False, shuffle=False)
+
+updater = training.updaters.StandardUpdater(train_iter, optimizer, device=-1)
+    
+trainer = training.Trainer(updater, (20, 'epoch'), out='result')
+
+trainer.extend(extensions.Evaluator(test_iter, model, device=-1))
+
+trainer.extend(extensions.LogReport())
 
 
+trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss','main/accuracy', 'validation/main/accuracy', 'elapsed_time']))
+
+trainer.extend(extensions.ProgressBar())
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+trainer.run()
 
 
 
