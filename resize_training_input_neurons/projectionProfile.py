@@ -125,6 +125,7 @@ def computeProjectionProfile(zones):
 
 resizedInputs = computeProjectionProfile(zones)
 resizedInputs_t = computeProjectionProfile(zones_t)
+<<<<<<< HEAD
 
 #print(len(resizedInputs))
 
@@ -187,3 +188,5 @@ trainer.run()
 
 
 
+=======
+>>>>>>> 59fc22c3decba93a98438b955f60cf78c2953663
