@@ -1,9 +1,3 @@
-​	
-
-
-
-
-
 In the cifar10 example inside the Chainer, architecture of the network is defined in [VGG.py](https://github.com/chainer/chainer/blob/master/examples/cifar/models/VGG.py).
 
 Python basics:
@@ -70,3 +64,83 @@ While, I still don't get the idea，，，***<u>so what on earth is decorator?</
 
 An article explain decorators well: [Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/#decorators). 
 
+Copy the best example to here:
+
+```python
+def my_decorator(some_function):
+    def wrapper():
+        num = 10
+        if num == 10:
+            print("Yes!")
+        else:
+            print("No!")
+
+        some_function()
+
+        print("Something is happening after some_function() is called.")
+
+#notice here we don't use wapper() so that way we can use them in the future.
+    return wrapper
+
+def just_some_function():
+    print("Wheee!")
+
+just_some_function = my_decorator(just_some_function)
+
+just_some_function()
+```
+
+output:
+
+```
+Yes!
+Wheee!
+Something is happening after some_function() is called.
+```
+
+How @ functions？  Compare the following piece of code.
+
+```python
+def my_decorator(some_function):
+    def wrapper():
+        num = 10
+        if num == 10:
+            print("Yes!")
+        else:
+            print("No!")
+
+        some_function()
+
+        print("Something is happening after some_function() is called.")
+
+    return wrapper
+
+if __name__ == "__main__":
+    my_decorator()
+```
+
+Call the function with the decorator:
+
+```python
+from decorator07 import my_decorator
+
+@my_decorator
+def just_some_function():
+    print("Wheee!")
+
+just_some_function()
+```
+
+output:
+
+```
+Yes!
+Wheee!
+Something is happening after some_function() is called.
+```
+
+So, `@my_decorator` is just an easier way of saying 
+
+`just_some_function = my_decorator(just_some_function)`. 
+
+It’s how you apply a decorator to a function. 
