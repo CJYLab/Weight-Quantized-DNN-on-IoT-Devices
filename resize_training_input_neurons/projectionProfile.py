@@ -34,7 +34,7 @@ reshapedMNISTdataset_t = reconstruct(test)
 
 def reshapedMN_to_zones(reshapedMNISTdataset):
 
-      	#each item[0] is an (28,28) array
+		#each item[0] is an (28,28) array
 	zones = []
 	labels = []
 	for items in reshapedMNISTdataset:
@@ -63,7 +63,7 @@ zones, labels = reshapedMN_to_zones(reshapedMNISTdataset)
 zones_t, labels_t = reshapedMN_to_zones(reshapedMNISTdataset_t)
 
 
-#zones = zones[0:3000]
+zones = zones[0:3000]
 #print(len(zones))
 #print(len(zones))
 
@@ -131,16 +131,16 @@ resizedInputs_t = computeProjectionProfile(zones_t)
 
 class MLP(chainer.Chain):
 
-    def __init__(self, n_units, n_out):
-        super(MLP, self).__init__()
-        with self.init_scope():
-            self.l1 = L.Linear(None, n_units)  
-            self.l2 = L.Linear(None, n_out)  
-	    #self.l3 = L.Linear(None, n_out)  # n_units -> n_out
-    def __call__(self, x):
-        h1 = F.relu(self.l1(x))
+	def __init__(self, n_units, n_out):
+		super(MLP, self).__init__()
+		with self.init_scope():
+			self.l1 = L.Linear(None, n_units)
+			self.l2 = L.Linear(None, n_out)
+	#self.l3 = L.Linear(None, n_out)  # n_units -> n_out
+	def __call__(self, x):
+		h1 = F.relu(self.l1(x))
 	#h2 = F.relu(self.l2(h1))
-        return self.l2(h1)
+		return self.l2(h1)
 
 
 
@@ -160,16 +160,16 @@ model = L.Classifier(MLP(10, 10))
 
 
 optimizer = chainer.optimizers.Adam()
-    
+
 optimizer.setup(model)
 
 
 train_iter = chainer.iterators.SerialIterator(train_, 100)
-    
+
 test_iter = chainer.iterators.SerialIterator(test_t, 100, repeat=False, shuffle=False)
 
 updater = training.updaters.StandardUpdater(train_iter, optimizer, device=-1)
-    
+
 trainer = training.Trainer(updater, (20, 'epoch'), out='result')
 
 trainer.extend(extensions.Evaluator(test_iter, model, device=-1))
