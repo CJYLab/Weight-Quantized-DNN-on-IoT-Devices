@@ -46,13 +46,8 @@ def reshapedMN_to_zones(reshapedMNISTdataset):
             cols = 7
             for k in range(4):
                 a = np.empty((7, 7))
-                a[0] = items[0][rows * i + 0][cols * k:cols * k + 7]
-                a[1] = items[0][rows * i + 1][cols * k:cols * k + 7]
-                a[2] = items[0][rows * i + 2][cols * k:cols * k + 7]
-                a[3] = items[0][rows * i + 3][cols * k:cols * k + 7]
-                a[4] = items[0][rows * i + 4][cols * k:cols * k + 7]
-                a[5] = items[0][rows * i + 5][cols * k:cols * k + 7]
-                a[6] = items[0][rows * i + 6][cols * k:cols * k + 7]
+                for _ in range(7):
+                    a[_] = items[0][rows * i + _][cols * k:cols * k + 7]
                 b.append(a)
 
         zones.append(b)
@@ -112,7 +107,6 @@ def computeProjectionProfile(zones):
 pool = mp.Pool()
 
 resizedInputs = pool.map(computeProjectionProfile, zones)
-
 resizedInputs_t = pool.map(computeProjectionProfile, zones_t)
 
 
@@ -129,47 +123,27 @@ class MLP(chainer.Chain):
     #h2 = F.relu(self.l2(h1))
         return self.l2(h1)
 
-
-
-
 train_ = tuple_dataset.TupleDataset(np.array(resizedInputs, dtype = np.float32), np.array(labels, dtype = np.int32))
 test_t = tuple_dataset.TupleDataset(np.array(resizedInputs_t, dtype = np.float32), np.array(labels_t, dtype = np.int32))
 
-
-
-
-#print(train_[0])
-
-print(train_.__getitem__(0))
-
-
 model = L.Classifier(MLP(10, 10))
 
-
 optimizer = chainer.optimizers.Adam()
-
 optimizer.setup(model)
 
-
 train_iter = chainer.iterators.SerialIterator(train_, 100)
-
 test_iter = chainer.iterators.SerialIterator(test_t, 100, repeat=False, shuffle=False)
 
 updater = training.updaters.StandardUpdater(train_iter, optimizer, device=-1)
-
 trainer = training.Trainer(updater, (20, 'epoch'), out='result')
 
 trainer.extend(extensions.Evaluator(test_iter, model, device=-1))
-
 trainer.extend(extensions.LogReport())
-
-
 trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss','main/accuracy', 'validation/main/accuracy', 'elapsed_time']))
-
 trainer.extend(extensions.ProgressBar())
 
 
-trainer.run()
+#trainer.run()
 
 t2 = time.time()
 
