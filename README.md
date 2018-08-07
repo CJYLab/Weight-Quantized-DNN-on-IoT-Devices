@@ -1,4 +1,4 @@
-# weight quantized DNN on embedded system
+# weight quantized DNN on IoT devices
 
 
 this repo is related to my research started from 2018 5/1 to 5/31
