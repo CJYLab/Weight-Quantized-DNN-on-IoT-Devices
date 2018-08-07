@@ -1,12 +1,3 @@
-import numpy as np
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import math
-import collections
-from collections import Counter
-import seaborn as sns 
-
-
 """
 Author: CAI JINGYONG @ BeatCraft, Inc & Tokyo University of Agriculture and Technology
 
@@ -22,7 +13,7 @@ parameters:
 	x: input
 
 
-LogQuant(x,bitwidth,FSR)= 0         x=0,	
+LogQuant(x,bitwidth,FSR)= 0         x=0,
 			  2^x'      otherwise.
 
 where
@@ -42,106 +33,62 @@ Round(x)
 
 """
 
-#oneDemArray=np.array([])
-repFile=open("cjyreplaced","r")
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import math
+import collections
+from collections import Counter
+import seaborn as sns
+from resize_training_input_neurons import projectionProfileMultiProcessVersion as pro
 
-Maxima=0
-Minima=0
+pro.dataPreparation()
+pro.trainMnist()
 
+chain = pro.chain_mnist
 
-#print(repFile.tell())
-for line in repFile:
-	content=line.split()
-	#print(content)
-	for numbers in content:
-		numbers=float(numbers)
-		if(numbers>Maxima):
-			Maxima=numbers
-		elif(numbers<Minima):
-			Minima=numbers
-		else:
-			doNothing=0
+weights_layer1 = np.array(chain.l1.W.data)
+biases_layer1 = np.array(chain.l1.b.data)
+weights_layer2 = np.array(chain.l2.W.data)
+biases_layer2 = np.array(chain.l2.b.data)
 
-#print(repFile.tell())
+maxima1 = np.amax(weights_layer1)
+minima1 = np.amin(weights_layer1)
+maxima2 = np.amax(weights_layer2)
+minima2 = np.amin(weights_layer2)
 
-FSR=Maxima-Minima
-
-
-#print(2**(FSR-1))
-MIN=FSR-(2**4)
-
-
-
-def Clip(x):
-	if(x<=MIN):
+def Clip(x, maxima, minima):
+	FSR = maxima - minima
+	MIN = FSR-(2**4)
+	if(x <= MIN):
 		return MIN
-	elif(x>=FSR):
+	elif(x >= FSR):
 		return FSR-1
 	else:
 		return x
 
-bridge=math.sqrt(2)-1
 
 def Round(num):
-	intPart=int(num)
-	decimalPart=num-intPart
-	if(decimalPart>=bridge):
+	bridge = math.sqrt(2)-1
+	decimalPart, intPart = np.modf(num)
+	if decimalPart >= bridge:
 		return math.ceil(num)
 	else:
 		return math.floor(num)
 
-QuanWeights = []
+vRound = np.vectorize(Round)
+vClip = np.vectorize(Clip)
 
-repFile1=open("cjyreplaced_dom","r")
 
-repFile2=open("quantified_data","w+")
+#for layer1:
 
-#print(repFile1.tell())
-for line2 in repFile1:
-	content2=line2.split()
-	for numbers2 in content2:
-		numbers2=float(numbers2)
-		Quantee=Clip(Round(math.log(abs(numbers2))))
-		if Quantee==0:
-			QuanWeights.append(float(0))
-		else:
-			QuanWeights.append(2**Quantee)
-			repFile2.write(str(2**Quantee))
-#a counter is a dict subclass for counting hashable objects.
 
-outCount=Counter(QuanWeights)
+quantized_weights_layer1 = vClip(vRound(np.log2(abs(weights_layer1))), maxima1, minima1)
+print(quantized_weights_layer1)
 
 
 
-sortedOutCount = collections.OrderedDict(sorted(outCount.items()))
+#for layer2:
 
-
-
-
-wKeys=np.array(sortedOutCount.keys())
-wValues=np.array(sortedOutCount.values())
-
-
-
-#print(QuanWeights)
-#print(outCount)
-
-#sns.factorplot(outCount, rug=True)
-plt.plot(wKeys,wValues,label='Frist line',color='r') 
-
-#plt.hist(od, bins=50, color='steelblue', normed=True)
-
-
-plt.bar(wKeys,wValues,width=0.001,align='edge')
-plt.xlabel('Log Quantified data')    
-plt.ylabel('Count')
-
-#plt.yticks(wValues)
-#print(type(wKeys))
-#print(len(QuanWeights))
-
-plt.show()
-#plt.savefig('sns')
-#print(Clip(1))
-#print(Round(1.415))
-
+quantized_weights_layer2 = vClip(vRound(np.log2(abs(weights_layer2))), maxima2, minima2)
+print(quantized_weights_layer2)
