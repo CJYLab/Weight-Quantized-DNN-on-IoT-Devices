@@ -114,7 +114,9 @@ def trainMnist():
     train_ = tuple_dataset.TupleDataset(np.array(resizedInputs, dtype=np.float32), np.array(labels, dtype=np.int32))
     test_t = tuple_dataset.TupleDataset(np.array(resizedInputs_t, dtype=np.float32), np.array(labels_t, dtype=np.int32))
 
-    model = L.Classifier(MLP(10, 10))
+    global chain_mnist
+    chain_mnist = MLP(10, 10)
+    model = L.Classifier(chain_mnist)
 
     optimizer = chainer.optimizers.Adam()
     optimizer.setup(model)
