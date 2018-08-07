@@ -40,7 +40,9 @@ import math
 import collections
 from collections import Counter
 import seaborn as sns
-from resize_training_input_neurons import projectionProfileMultiProcessVersion as pro
+import sys
+sys.path.append('../projectionProfileAlgorithm')
+import projectionProfileMultiProcessVersion as pro
 
 pro.dataPreparation()
 pro.trainMnist()
