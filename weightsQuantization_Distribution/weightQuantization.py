@@ -37,9 +37,6 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import math
-import collections
-from collections import Counter
-import seaborn as sns
 import sys
 sys.path.append('../projectionProfileAlgorithm')
 import projectionProfileMultiProcessVersion as pro
@@ -137,14 +134,15 @@ for index, inputs in enumerate(test_items):
 	layer1_out[layer1_out < 0] = 0
 	layer2_out = np.dot(anti_quantized_weights_layer2,layer1_out) + biases_layer2
 	output = np.argmax(layer2_out)
-	print(int(output))
-	print(int(test_items_labels[index]))
-	print("----------")
+	#print(int(output))
+	#print(int(test_items_labels[index]))
+	#print("----------")
 	if int(output) == int(test_items_labels[index]):
 		count = count+1
 
 accuracy = count/1000
-print("accuracy")
+print("--------------accuracy--------------")
 print(accuracy)
+print("--------------accuracy--------------")
 
 #visualization
