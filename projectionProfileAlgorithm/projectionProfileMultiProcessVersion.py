@@ -125,7 +125,7 @@ def trainMnist():
     test_iter = chainer.iterators.SerialIterator(test_t, 100, repeat=False, shuffle=False)
 
     updater = training.updaters.StandardUpdater(train_iter, optimizer, device=-1)
-    trainer = training.Trainer(updater, (20, 'epoch'), out='result')
+    trainer = training.Trainer(updater, (50, 'epoch'), out='result')
 
     trainer.extend(extensions.Evaluator(test_iter, model, device=-1))
     trainer.extend(extensions.LogReport())
