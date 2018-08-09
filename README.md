@@ -1,9 +1,12 @@
 # weight quantized DNN on IoT devices
 
 
-this repo is related to my research started from 2018 5/1 to 5/31
+make sure the following modules are installed:
 
-our aim is to reduce weights, input neurons greatly so that it could be ran on a 16KB ram microchip.
+Chainer
 
-MNIST dataset is used.
+numpy
 
+matplotlib
+
+multiprocessing
