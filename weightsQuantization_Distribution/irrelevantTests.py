@@ -22,11 +22,27 @@ class MLP(chainer.Chain):
     def __call__(self, x):
         h1 = F.relu(self.l1(x))
         return self.l2(h1)
+    # def __call__(self, x, t, train):
+    #
+    #     x = chainer.Variable(x)
+    #     t = chainer.Variable(t)
+    #
+    #     h = F.relu(self.l1(x))
+    #     h = self.l2(h)
+    #
+    #     if train:
+    #         return F.softmax_cross_entropy(h, t), F.accuracy(h, t)
+    #     else:
+    #         return F.accuracy(h, t)
+
+
+
+
 
 
 def Clip(x,maxima,minima):
     FSR = maxima - minima
-    MIN = FSR-(2**4)
+    MIN = FSR-(2**3)
     if(x <= MIN):
         return MIN
     elif(x >= FSR):
@@ -93,9 +109,11 @@ def main():
 
 
 
+    randint = np.random.randint(0,1000)
+    print(randint)
 
-    item1 = train[7][0]
-    item1_label = train[7][1]
+    item1 = test[randint][0]
+    item1_label = test[randint][1]
     print(item1_label)
 
 
@@ -154,11 +172,15 @@ def main():
     T2 = np.array(K.l2.W.data)
     T2_b = np.array(K.l2.b.data)
 
+
+
+    # print("shape of bias")
+    # print(T1_b.shape)
     print("real weights of layer 1")
     print(T1)
     mask = T1<0
-    print("real weights of layer 2")
-    print(T2)
+    # print("real weights of layer 2")
+    # print(T2)
     mask2 = T2<0
 
     maxima1 = np.amax(T1)
@@ -182,42 +204,55 @@ def main():
     antiQuanti2 = np.power(2.0,quantized_weights_layer2)
 
 
-
-
 #    mask   antiQuanti1
-    print("replace elements of mask")
+#     print("replace elements of mask")
     mask = mask*(-1)
     mask[mask>-1] = 1
+    #mask[mask<1] = 0
 
     antiQuanti1 = antiQuanti1*mask
-    print("antiQuant1: weights with inputs")
-    print(antiQuanti1)
+
+    # print("antiQuant1: weights with inputs")
+    # print(antiQuanti1)
 
 
 #    mask   antiQuanti2
-    print("replace elements of mask 2")
+#    print("replace elements of mask 2")
     mask2 = mask2*(-1)
     mask2[mask2>-1] = 1
+    #mask2[mask2<1] = 0
+
+
     antiQuanti2 = antiQuanti2*mask2
+
+
+    K.l1.W = chainer.Variable(antiQuanti1)
+    K.l2.W = chainer.Variable(antiQuanti2)
+    print(K.l1.W.data.shape)
+
+    #F.accuracy(np.array(test[0:4][0]),np.array(test[0:4][1]))
+
+
+
+
+
+    #把下面这些封装成函数，然后循环着来就能够测出准确率
 
 
 
     layer1_out = np.dot(antiQuanti1,item1) + T1_b
 
+    #relu here
+    layer1_out[layer1_out < 0] = 0
 
-
-#relu here
-
-
-
-
-    print("layer1 out")
-    print(layer1_out)
-    layer1_out = F.relu(layer1_out)
     layer2_out = np.dot(antiQuanti2,layer1_out) + T2_b
-
+    #
     print("layer2 out")
     print(layer2_out)
+
+
+
+
 
 
 
@@ -246,6 +281,16 @@ def forward(self,inputs)
     
 0809
 找到问题了    被quantized量化了之后   原有的负号全部丢失了
+
+
+
+0809-2
+
+替换原有的权重值之前  要注意把生成的权重值转化为chainer.Variable
+
+
+C.functions.Accuracy(ignore_label=None)
+
 """
 
 
