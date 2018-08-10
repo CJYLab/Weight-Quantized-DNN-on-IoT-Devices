@@ -146,3 +146,68 @@ print(accuracy)
 print("--------------accuracy--------------")
 
 #visualization
+
+
+# print("weights of layer1, before quantization")
+# print(weights_layer1)
+#
+# print("weights of layer1, after quantization")
+# print(anti_quantized_weights_layer1)
+#
+# print("weights of layer2, before quantization")
+# print(weights_layer2)
+#
+# print("weights of layer2, after quantization")
+# print(anti_quantized_weights_layer2)
+
+figure = plt.figure()
+
+plt.subplot(2,1,1)
+
+#compoute the desity of the weights
+density_x = np.linspace(round(minima1,2),round(maxima1,2),100)
+y, x = np.histogram(weights_layer1, bins=density_x)
+x = x + (maxima1-minima1)/200
+plt.plot(x[:-1], y,'k', linewidth=1)
+plt.scatter(x[:-1], y, s=5, c='k', label='Weights count within intervals')
+#compute each interval size
+interval = round((maxima1-minima1)/100, 3)
+plt.ylabel('density: count within {} interval'.format(interval))
+plt.xlabel('value of weights')
+ticks_to_be_showed = []
+
+for _ in range(100):
+	ticks_to_be_showed.append('')
+
+for _ in range(0,100,20):
+	ticks_to_be_showed[_] = round(density_x[_],2)
+ticks_to_be_showed[99] = round(density_x[99],2)
+#print(ticks_to_be_showed)
+# x_label = np.linspace(round(minima1,2),round(maxima1,2),100)
+
+
+plt.xticks(density_x, ticks_to_be_showed)
+plt.legend(loc='best')
+
+plt.subplot(2,1,2)
+unique, counts_ = np.unique(anti_quantized_weights_layer1, return_counts= True)
+for index, counts in enumerate(unique):
+	plt.plot([unique[index],unique[index]], [0, counts_[index]],'k-',linewidth=1.5)
+plt.plot([], [], c='k', label='Count of quantized weights')
+
+
+
+plt.legend()
+randint2 = 16*np.random.random_sample(size=1024)
+#plt.scatter(weights_layer1,randint2,alpha=0.4,s=10)
+plt.ylabel('count')
+plt.xlabel('value of weights(log quantized)')
+#plt.grid(True)
+
+
+
+
+plt.tight_layout()
+#plt.show()
+figure.savefig('my_image.svg', format='svg', dpi=1200)
+figure.savefig('my_image_png.png')
