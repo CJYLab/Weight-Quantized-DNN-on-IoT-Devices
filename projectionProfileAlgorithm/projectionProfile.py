@@ -62,16 +62,12 @@ def reshapedMN_to_zones(reshapedMNISTdataset):
 
     return zones, labels
 
-
 zones, labels = reshapedMN_to_zones(reshapedMNISTdataset)
 zones_t, labels_t = reshapedMN_to_zones(reshapedMNISTdataset_t)
-
 
 #zones = zones[0:3000]
 #print(len(zones))
 #print(len(zones))
-
-
 
 """
 60000 items, they are 16 arrays with each of shape of (7,7)
@@ -79,9 +75,7 @@ this function aims to compute the projection profiles of each array
 we will compute 4 projection profiles (horizontally, vertically, left diagnosly and right diagnosly).
 For each array, we get 4 projection profiles, then we store peak values for each projection profile
 """	
-
 #f = open("resizedInputs_t","w+")
-
 #zones have 60000 items
 #each item has 16 groups(array)
 def computeProjectionProfile(zones):
@@ -122,17 +116,12 @@ def computeProjectionProfile(zones):
 
     return resizedInputs
 
-
-
-
 resizedInputs = computeProjectionProfile(zones)
 resizedInputs_t = computeProjectionProfile(zones_t)
 
 #print(len(resizedInputs))
 
-
 class MLP(chainer.Chain):
-
     def __init__(self, n_units, n_out):
         super(MLP, self).__init__()
         with self.init_scope():
@@ -144,51 +133,26 @@ class MLP(chainer.Chain):
     #h2 = F.relu(self.l2(h1))
         return self.l2(h1)
 
-
-
-
 train_ = tuple_dataset.TupleDataset(np.array(resizedInputs, dtype = np.float32), np.array(labels, dtype = np.int32))
 test_t = tuple_dataset.TupleDataset(np.array(resizedInputs_t, dtype = np.float32), np.array(labels_t, dtype = np.int32))
 
 
-
-
 #print(train_[0])
-
 print(train_.__getitem__(0))
-
-
 model = L.Classifier(MLP(10, 10))
-
-
 optimizer = chainer.optimizers.Adam()
-
 optimizer.setup(model)
-
-
 train_iter = chainer.iterators.SerialIterator(train_, 100)
-
 test_iter = chainer.iterators.SerialIterator(test_t, 100, repeat=False, shuffle=False)
-
 updater = training.updaters.StandardUpdater(train_iter, optimizer, device=-1)
-
 trainer = training.Trainer(updater, (20, 'epoch'), out='result')
 
 trainer.extend(extensions.Evaluator(test_iter, model, device=-1))
-
 trainer.extend(extensions.LogReport())
-
-
 trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss','main/accuracy', 'validation/main/accuracy', 'elapsed_time']))
-
 trainer.extend(extensions.ProgressBar())
-
 
 trainer.run()
 
 t2 = time.time()
-
 print(t2-t1)
-
-
-
