@@ -1,1 +1,1 @@
-![memory map](../doc/image/memoryMap.png)
+![memory map](../doc/images/memoryMap.png)
