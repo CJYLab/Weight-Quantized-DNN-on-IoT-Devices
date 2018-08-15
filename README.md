@@ -1,7 +1,6 @@
 # Weight Quantized DNN on IoT Devices
 
 
-# Weight Quantized DNN on IoT Devices
 
 Workflow, methods used in this repository will be published as an IEEE GCCE2018 conference paper, citation will be updated later.
 
