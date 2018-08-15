@@ -12,7 +12,7 @@ Our purpose is to **reduce the weights size greatly while keeping the same accur
 
 How this is possible? The answer is **logarithmic Quantization**. 
 
-Say the original weights are 32bit float numbers, after quantization they are reduced to 3bit. in our case, we reduced the weights size of one hidden layer from 50KB+ to 1KB- which make it possible to store the whole matrices in the tiny RAM. 
+Say the original weights are 32bit float numbers, after quantization they are reduced to 3bit. in our case, we reduced the weights size of one hidden layer of MNIST from 50KB+ to 1KB- which make it possible to store the whole matrices in the tiny RAM. 
 
 ## Quantization: Before & After
 
