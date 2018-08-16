@@ -18,7 +18,7 @@ Say the original weights are 32bit float numbers, after quantization they are re
 
 ## An algorithm for inputs reduction
 
-![four direction projection profiles](doc/images/matrix_image.jpg)
+![four direction projection profiles](doc/images/matrix_image0.jpg)
 ## Quantization: Before & After
 
 
