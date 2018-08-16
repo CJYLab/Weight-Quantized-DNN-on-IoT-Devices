@@ -27,8 +27,18 @@ Quantization in 3bits: how weights look like?
 ![before quantization](doc/images/before_quanti_3bits_50.png)
 ![after quantization](doc/images/after_quanti_3bits_50.png)   
 
+## Results(Distribution-accuracy):
 
-## Accuracy:
+By default, hidden layer contains 50 neurons.
+**4bits**
+![4bits](doc/images/my_image_4bits_50.png)
+
+**accuracy：** 0.887
+
+**7bits:**
+
+**3bits**
+
 
 
 
