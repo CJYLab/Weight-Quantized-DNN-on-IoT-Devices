@@ -24,8 +24,8 @@ Say the original weights are 32bit float numbers, after quantization they are re
 
 Quantization in 3bits: how weights look like?
 -----------------------
-![before quantization](before_quanti_3bits_50.png)
-![after quantization](after_quanti_3bits_50.png)   
+![before quantization](doc/images/before_quanti_3bits_50.png)
+![after quantization](doc/images/after_quanti_3bits_50.png)   
 
 
 ## Accuracy:
