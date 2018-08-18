@@ -78,7 +78,29 @@ def Round(num):
 vRound = np.vectorize(Round)
 vClip = np.vectorize(Clip)
 
-
+def outputWeightsArrayFile(weights):
+    # check whether the parameter is numpy, add laterly
+    for k, v in list(locals().iteritems()):
+        if v is weights:
+            a_as_str = k
+    filename = a_as_str + '_file.txt'
+    arrayname = a_as_str + 'quantized_weights_layer1_array'
+    rows = weights.shape[0]
+    cols = weights.shape[1]
+    with open(filename,'w+') as f:
+        f.write("int " + arrayname + "[" + str(rows) + "]" + "[" + str(cols) + "] = {")
+        for index, _ in enumerate(weights[:,]):
+            f.write("{")
+            for i in _[0:-1]:
+                f.write(str(i.item()))
+                f.write(", ")
+            f.write(str(_[-1].item()))
+            if(index == (rows - 1)):
+                f.write("}")
+            else:
+                f.write("}, ")
+        f.write("}")
+    f.close()
 
 #mask (sign bits of the original weights, these informatin will get lost after quantization)
 def signBitsMaskArray(layer):
