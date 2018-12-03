@@ -6,7 +6,7 @@ This repo is outdated, please refer to [DLQ](https://github.com/CJYLab/Logarithm
 
 If you find our method helpful, please considering cite:
 
-A Deep Look into Logarithmic Quantization of Model Parameters in Neural Networks, Jingyong Cai, Masashi Takemoto and Hironori Nakajo, Proceedings of The 10th International Conference on Advances in Information Technology (IAIT2018)
+> A Deep Look into Logarithmic Quantization of Model Parameters in Neural Networks, Jingyong Cai, Masashi Takemoto and Hironori Nakajo, Proceedings of The 10th International Conference on Advances in Information Technology (IAIT2018)
 
 Workflow, methods used in this repository will be published as an IEEE GCCE2018 conference paper, citation will be updated later.
 
