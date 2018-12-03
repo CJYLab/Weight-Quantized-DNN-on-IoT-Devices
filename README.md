@@ -2,9 +2,10 @@
 
 ## Update
 
-This repo is outdated, please refer to [DLQ](https://github.com/CJYLab/Logarithmic-Quantization-of-Parameters-in-Neural-Networks) where one of the best quantization approach could be found.
+This repo is outdated, please refer to [DLQ](https://github.com/CJYLab/Logarithmic-Quantization-of-Parameters-in-Neural-Networks) which contains one of the best quantization approach (simple yet powerful, even without retraining).
 
 If you find our method helpful, please considering cite:
+
 A Deep Look into Logarithmic Quantization of Model Parameters in Neural Networks, Jingyong Cai, Masashi Takemoto and Hironori Nakajo, Proceedings of The 10th International Conference on Advances in Information Technology (IAIT2018)
 
 Workflow, methods used in this repository will be published as an IEEE GCCE2018 conference paper, citation will be updated later.
